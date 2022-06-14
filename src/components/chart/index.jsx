@@ -7,18 +7,19 @@ import { cancelOrder } from "../../app/chart/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import {conf} from '../../conf';
 const Chart = (props) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const charts = useSelector((state) => state.chart);
   const { token } = localStorage.getItem('auth')? JSON.parse(localStorage.getItem("auth")) : '';
-  const urlImage = `http://localhost:3000/images/products/`;
+  const urlImage = `${conf.api_url}/images/products/`;
   useEffect(() => {
     if (charts && token) {
       const fetchChart = async () => {
         await axios.put(
-          "http://localhost:3000/api/carts/",
+          `${conf.api_url}/api/v1/carts/`,
           { items: charts },
           {
             headers: {

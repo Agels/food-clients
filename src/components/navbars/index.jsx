@@ -92,6 +92,7 @@ const Navbars = () => {
         password: password,
       };
       const { data } = await Login(payloadx);
+      console.log(data)
       if (data) {
         const setLocal = {
           user : data.user,
