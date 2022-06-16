@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Card, Alert, Container, Col, Row } from "react-bootstrap";
 import { formatRupiah } from "../../helper";
 import { Link } from "react-router-dom";
-import {conf} from '../../conf';
+import { conf } from "../../conf";
 const Invoices = () => {
   const [invoices, setInvoices] = useState({});
+  const navigate = useNavigate();
   const { orderId } = useParams();
   const { token } = JSON.parse(localStorage.getItem("auth"));
   useEffect(() => {
@@ -23,7 +24,6 @@ const Invoices = () => {
     <div>
       <Container>
         {invoices !== null ? (
-   
           <>
             <Card style={{ width: "40rem" }} className="mx-auto mt-5">
               <Card.Header as="h5">Invoices</Card.Header>
@@ -65,8 +65,8 @@ const Invoices = () => {
                 </Row>
               </Card.Body>
             </Card>
-            <div className="d-flex justify-content-end px-5">
-              <Link to="/">
+            <div className="d-flex mt-2">
+              <Link to="/" className="mx-auto ">
                 <button className="btn btn-primary">Home</button>
               </Link>
             </div>

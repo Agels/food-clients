@@ -34,7 +34,7 @@ const Cards = (props) => {
         style={style}
         className="h-100"
       >
-        <Card.Img variant="top" src={props.image} style={{ width: "150x", height:'243px' }} />
+        <Card.Img variant="top" style={{width:'65%', height:'55%'}} src={props.image} />
         <Card.Body></Card.Body>
         <Row lg={12}>
           <Col lg={8}>

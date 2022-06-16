@@ -4,7 +4,8 @@ import GetAddress from "./getAddress";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { PostAddress } from "./address";
-const Address = () => {
+
+const Address = (props) => {
   const [provinsi, setProvinsi] = useState([]);
   const [kabupaten, setKabupaten] = useState([]);
   const [kecamatan, setKecamatan] = useState([]);
@@ -87,11 +88,8 @@ const Address = () => {
   };
 
   return (
-    <div className="mt-3">
+    <div className={!props.fromProfil ? "mt-3" : "" }>
       <div className="d-flex justify-content-end">
-        <Button variant="primary" onClick={handleShow}>
-          add address
-        </Button>
       </div>
       <Modal show={show}>
         <Modal.Header >
@@ -229,7 +227,7 @@ const Address = () => {
           </Form>
         </Modal.Body>
       </Modal>
-      <GetAddress isSubmmited={isSubmmited} />
+      <GetAddress isSubmmited={isSubmmited} fromProfil={props.fromProfil} onClick={handleShow} />
     </div>
   );
 };

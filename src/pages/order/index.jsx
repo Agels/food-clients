@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { Card, Col, Row } from "react-bootstrap";
 import {conf} from '../../conf';
-const Order = () => {
+const Order = (props) => {
   const address = useSelector((state) => state.address.address);
   const chart = useSelector((state) => state.chart);
   const dispatch = useDispatch();
@@ -73,6 +73,13 @@ const Order = () => {
         </Card.Body>
       </Card>
       <div className="d-flex">
+      <button
+        onClick={() => props.goBackPage()}
+  
+        className="btn btn-danger mt-3"
+      >
+        back
+      </button>
       <button
         onClick={submit}
         type="submit"

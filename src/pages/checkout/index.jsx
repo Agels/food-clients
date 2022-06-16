@@ -81,10 +81,7 @@ const Checkout = () => {
             )}
             {page === 3 && (
               <>
-                <Order />
-                <button onClick={goBackPage} className="btn btn-danger">
-                  Back
-                </button>
+                <Order goBackPage={() => goBackPage()} />
               </>
             )}
             {page === 4 && <Invoices />}
