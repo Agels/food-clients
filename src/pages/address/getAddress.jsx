@@ -7,6 +7,7 @@ import {
   Card,
   Table,
   Button,
+  Spinner,
 } from "react-bootstrap";
 import { postAddress } from "../../app/address/actions";
 import axios from "axios";
@@ -14,16 +15,21 @@ import { useDispatch } from "react-redux";
 import { conf } from "../../conf";
 const GetAddress = (props) => {
   const [address, setAddress] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { token } = JSON.parse(localStorage.getItem("auth"));
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${conf.api_url}/api/v1/deliveryAddress`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => setAddress(res.data.data));
+      .then((res) => {
+        setAddress(res.data.data);
+        setLoading(false);
+      });
   }, [props.isSubmmited, token]);
   const handleSelect = (e) => {
     const address = JSON.parse(e.target.value);
@@ -31,17 +37,19 @@ const GetAddress = (props) => {
   };
 
   return (
-    <Card>
+    <Card style={{ width: "40rem" }}>
       <Card.Header as="h5" className="d-flex">
         Address
         <Button variant="primary" className="ms-auto" onClick={props.onClick}>
           add address
         </Button>
       </Card.Header>
-      {address.length < 1 ? (
-        <div className="bg-light" style={{ width: "40rem" }}>
-          <p className="text-center">Address not found</p>
+      {isLoading ? (
+        <div className="mx-auto">
+          <Spinner animation="border" />
         </div>
+      ) : address.length < 1 ? (
+        <p className="text-center">Address not found</p>
       ) : props.fromProfil ? (
         <Table striped bordered hover>
           <thead>
@@ -70,6 +78,7 @@ const GetAddress = (props) => {
       ) : (
         address.map((e, index) => {
           return (
+            <label htmlFor={e.id} style={{cursor:'pointer'}}>
             <Container key={index} className="mt-3">
               <Row>
                 <div className="bg-light" style={{ width: "40rem" }}>
@@ -99,6 +108,7 @@ const GetAddress = (props) => {
                 </div>
               </Row>
             </Container>
+            </label>
           );
         })
       )}

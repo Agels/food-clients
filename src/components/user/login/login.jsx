@@ -3,7 +3,7 @@ import { userLogin } from "../../../app/auth/actions";
 import { useDispatch } from "react-redux";
 import Login from "./index";
 import Swal from "sweetalert2";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Spinner } from "react-bootstrap";
 import RegisterForm from "../register/register";
 const LoginForm = (props) => {
   const dispatch = useDispatch();
@@ -13,8 +13,9 @@ const LoginForm = (props) => {
   });
   const [signinError, setSigninError] = useState([]);
   const [showRegis, setRegis] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const handleClose = () => {
-    setRegis(false)
+    setRegis(false);
   };
 
   const handleRegis = () => {
@@ -25,7 +26,6 @@ const LoginForm = (props) => {
     const error = [];
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     const { email, password } = dataLogin;
-    console.log(dataLogin);
     if (email.length === 0) {
       error.push("email cannot be null");
     } else if (!emailRegex.test(email)) {
@@ -39,8 +39,9 @@ const LoginForm = (props) => {
     if (error.length > 0) {
       setSigninError(error);
     } else {
+      setLoading(true);
       setSigninError([]);
-      props.handleClose();
+     
       const payload = {
         email: email,
         password: password,
@@ -70,6 +71,8 @@ const LoginForm = (props) => {
           timer: 2000,
         });
       }
+      setLoading(false);
+      props.handleClose();
     }
   };
   return (
@@ -111,20 +114,39 @@ const LoginForm = (props) => {
 
             <Modal.Footer>
               <p className="text-start">New to FoodStore ?</p>
-              <a href="#/" onClick={() => {handleRegis();  props.handleClose();}}>
+              <a
+                href="#/"
+                onClick={() => {
+                  handleRegis();
+                  props.handleClose();
+                }}
+              >
                 Sign Up
               </a>
               <Button variant="secondary" onClick={props.handleClose}>
                 Close
               </Button>
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
+              {isLoading ? (
+                <Button variant="primary" disabled>
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  Loading...
+                </Button>
+              ) : (
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+              )}
             </Modal.Footer>
           </Form>
         </Modal.Body>
       </Modal>
-      <RegisterForm isModalVisisble={showRegis} handleClose={handleClose}/>
+      <RegisterForm isModalVisisble={showRegis} handleClose={handleClose} />
     </div>
   );
 };

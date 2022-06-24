@@ -19,6 +19,7 @@ const Home = () => {
   const tags = useSelector((state) => state.tags);
 
   const [number, setNumber] = useState(1); // No of pages
+  const [skip, setSkip] = useState(0);
   const [postPerPage] = useState(6);
 
   const urlImage = `${conf.api_url}/images/products/`;
@@ -33,7 +34,7 @@ const Home = () => {
       }
       await axios
         .get(
-          `${conf.api_url}/api/v1/product?q=${search}&category=${category}${tag}`
+          `${conf.api_url}/api/v1/product?q=${search}&category=${category}${tag}&skip=${skip}`
         )
         .then((res) => {
           setProduct(res.data.data);
@@ -41,8 +42,7 @@ const Home = () => {
         });
     };
     getProduct();
-    
-  }, [search, category, tags]);
+  }, [search, category, tags, number, skip]);
 
   const lastPost = number * postPerPage;
   const firstPost = lastPost - postPerPage;
@@ -52,6 +52,7 @@ const Home = () => {
     pageNumber.push(i);
   }
   const ChangePage = (pageNumber) => {
+    setSkip(skip + currentPost);
     setNumber(pageNumber);
   };
   return (
@@ -96,11 +97,11 @@ const Home = () => {
                   disabled={number <= 1}
                   onClick={() => setNumber(number - 1)}
                 />
-                {pageNumber.map((Elem) => {
+                {pageNumber.map((Elem, index) => {
                   return (
                     <>
                       <Pagination.Item
-                        key={number}
+                        key={index}
                         variant="danger"
                         active={Elem === number}
                         onClick={() => ChangePage(Elem)}

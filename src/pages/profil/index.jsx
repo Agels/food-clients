@@ -1,42 +1,56 @@
-import { ListGroup, Col, Tab, Row, Container } from "react-bootstrap";
+import { ListGroup, Col, Tab, Row, Container, Button } from "react-bootstrap";
 import Navbars from "../../components/navbars";
 import InvoicesProfile from "./invoices";
 import UserProfil from "./user";
 import Address from "../address";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 const Profil = () => {
-
+  const [active, setActive] = useState("invoices");
   return (
     <>
       <Navbars />
       <Container className="mt-5">
-        <Tab.Container id="list-group-tabs-example" defaultActiveKey="#profil">
+        <Link to="/">
+          <Button variant="danger" className="mb-2">
+            Back
+          </Button>
+        </Link>
+        <Tab.Container id="list-group-tabs-example" defaultActiveKey="#invoices">
           <Row>
             <Col sm={4}>
               <ListGroup>
-                <ListGroup.Item action href="#profil">
+                <ListGroup.Item
+                  action
+                  href="#profil"
+                  onClick={() => setActive("profil")}
+                >
                   Profil
                 </ListGroup.Item>
-                <ListGroup.Item action href="#invoices">
+                <ListGroup.Item
+                  action
+                  href="#invoices"
+                  onClick={() => setActive("invoices")}
+                >
                   Invoices
                 </ListGroup.Item>
-                <ListGroup.Item action href="#address">
+                <ListGroup.Item
+                  action
+                  href="#address"
+                  onClick={() => setActive("address")}
+                >
                   Address
                 </ListGroup.Item>
-     
               </ListGroup>
             </Col>
             <Col sm={8}>
               <Tab.Content>
-                <Tab.Pane eventKey="#profil">
-                <UserProfil />
-                </Tab.Pane>
-                <Tab.Pane eventKey="#invoices">
-                  <InvoicesProfile />
-                </Tab.Pane>
-                <Tab.Pane eventKey="#address">
-                  {/* //render component from address */}
-                 <Address fromProfil="true" />
-                </Tab.Pane>
+                {active === "profil" && <UserProfil />}
+
+                {active === "invoices" && <InvoicesProfile />}
+                {/* //render component from address */}
+
+                {active === "address" && <Address fromProfil="true" />}
               </Tab.Content>
             </Col>
           </Row>

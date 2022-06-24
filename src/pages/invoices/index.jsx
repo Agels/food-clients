@@ -7,17 +7,21 @@ import { Link } from "react-router-dom";
 import { conf } from "../../conf";
 const Invoices = () => {
   const [invoices, setInvoices] = useState({});
-  const navigate = useNavigate();
   const { orderId } = useParams();
+  const [isLoading, setLoading] = useState(false);
   const { token } = JSON.parse(localStorage.getItem("auth"));
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${conf.api_url}/api/v1/invoices/${orderId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => setInvoices(res.data.data));
+      .then((res) => {
+        setInvoices(res.data.data)
+        setLoading(false)
+      });
   }, [orderId, token]);
 
   return (
@@ -36,18 +40,20 @@ const Invoices = () => {
                   <Col lg={6}>Status</Col>
                   <Col lg={6}>
                     {" "}
-                    <Alert variant="danger">{invoices.payment_status}</Alert>
+                   {isLoading? <p>loading...</p>: <Alert variant="danger">{invoices.payment_status}</Alert>} 
                   </Col>
                   <hr />
                   <Col lg={6}>billed to</Col>
                   <Col lg={6}>
                     <strong>{invoices.user?.full_name}</strong>
+                  {isLoading ? <p>loading...</p> : (
                     <p>
-                      {invoices.delivery_address?.provinsi},{" "}
-                      {invoices.delivery_address?.kabupaten},{" "}
-                      {invoices.delivery_address?.kecamatan},
-                      {invoices.delivery_address?.kelurahan}
-                    </p>
+                    {invoices.delivery_address?.provinsi},{" "}
+                    {invoices.delivery_address?.kabupaten},{" "}
+                    {invoices.delivery_address?.kecamatan},
+                    {invoices.delivery_address?.kelurahan}
+                  </p>
+                  )}  
                   </Col>
                   <hr />
                   <Col lg={6}>payment to</Col>
@@ -60,8 +66,8 @@ const Invoices = () => {
                   <Col lg={6}>
                     <p className="fw-bold">TOTAL </p>
                   </Col>
+                 <Col lg={6}>{isLoading ? <p>loading ...</p> : formatRupiah(invoices.total)}</Col> 
 
-                  <Col lg={6}>{formatRupiah(invoices.total)}</Col>
                 </Row>
               </Card.Body>
             </Card>

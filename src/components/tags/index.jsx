@@ -18,7 +18,6 @@ const Tags = (props) => {
     setTags(newArr);
     dispatch(addTags(newArr))
 
-   
   };
 
   useEffect(() => {
@@ -26,7 +25,6 @@ const Tags = (props) => {
       .get(`${conf.api_url}/api/v1/tags`)
       .then((res) => setDataTags(res.data.data));
   }, []);
-console.log(tags)
   return (
     <>
       <h5>
@@ -34,12 +32,11 @@ console.log(tags)
           return (
             <Fragment key={index}>
                  <ToggleButton
-                className="mb-2"
+                className="border border-dark"
                 id={item.name}
                 type="checkbox"
-                variant="outline-dark"
                 value={item.name}
-                checked={tags.includes(item.name) ? 'checked' :''}
+                variant={tags.includes(item.name) ? 'dark' :''}
                 onChange={handleChekbox}
                 
                 >

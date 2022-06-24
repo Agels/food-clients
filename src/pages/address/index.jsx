@@ -1,4 +1,4 @@
-import { Form, FloatingLabel, Modal, Button } from "react-bootstrap";
+import { Form, FloatingLabel, Modal, Button, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import GetAddress from "./getAddress";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { PostAddress } from "./address";
 
 const Address = (props) => {
   const [provinsi, setProvinsi] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   const [kabupaten, setKabupaten] = useState([]);
   const [kecamatan, setKecamatan] = useState([]);
   const [kelurahan, setKelurahan] = useState([]);
@@ -65,6 +66,7 @@ const Address = (props) => {
   }, [getAddrres.kecamatan.id]);
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
     let payload = {
       name: name,
@@ -74,7 +76,9 @@ const Address = (props) => {
       kecamatan: getAddrres.kecamatan.name,
       kelurahan: getAddrres.kelurahan.name,
     };
-    await PostAddress(payload);
+  
+  const {data} = await PostAddress(payload);
+  if(data.status === "data has been added"){
     Swal.fire({
       text: "success add data",
       icon: "success",
@@ -84,8 +88,12 @@ const Address = (props) => {
       showConfirmButton: false,
       timer: 1500,
     });
+   
     setIsSubmitted(true);
   };
+  setLoading(false)
+  handleClose();
+  }
 
   return (
     <div className={!props.fromProfil ? "mt-3" : "" }>
@@ -220,9 +228,22 @@ const Address = (props) => {
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
-              <Button variant="primary" type="submit" onClick={handleClose}>
-                Submit
+              {isLoading ? (
+              <Button variant="primary" disabled>
+                <Spinner
+                  as="span"
+                  animation="grow"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                Loading...
               </Button>
+            ) : (
+              <Button variant="primary" type="submit">
+                Sumbit
+              </Button>
+            )}
             </Modal.Footer>
           </Form>
         </Modal.Body>
