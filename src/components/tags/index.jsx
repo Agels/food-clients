@@ -33,16 +33,6 @@ console.log(tags)
         {dataTags.map((item, index) => {
           return (
             <Fragment key={index}>
-              {/* <label htmlFor="" className="">{item.name}</label>
-               <input
-                id={item.name}
-                type="checkbox"
-                value={item.name}
-                onChange={handleChekbox}
-                className="btn"
-              /> {" "} */}
-            {/* </label>  */}
-            
                  <ToggleButton
                 className="mb-2"
                 id={item.name}
